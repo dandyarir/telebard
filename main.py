@@ -36,16 +36,17 @@ def send_typing_action(func):
   return command_func
 
 @send_typing_action
-def initBardInstance(update: Update, context):
+def initBardInstance(update: Update, context, notify):
     global bardInstance
     bardInstance = Bard(token=token_bard, session=session, timeout=30)
-    context.bot.send_message(chat_id=update.effective_chat.id, text="New Chat Initialized")
+    if notify:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="New Chat Initialized")
     pass
 
-def checkBardInstance(update: Update, context):
+def checkBardInstance(update: Update, context, notify):
     global bardInstance
     if bardInstance is None:
-        initBardInstance(update, context)
+        initBardInstance(update, context, notify=notify)
     pass
 
 @send_typing_action
@@ -60,7 +61,7 @@ def start(update: Update, context):
 def answer(update, context):
   input_text = update.message.text
 
-  checkBardInstance(update, context)
+  checkBardInstance(update, context, notify=False)
   # Perform API request and get the response
   response = bardInstance.get_answer(input_text)
 
