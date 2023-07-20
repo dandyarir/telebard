@@ -51,7 +51,7 @@ def checkBardInstance(update: Update, context, notify):
 
 @send_typing_action
 def start(update: Update, context):
-  context.bot.send_message(chat_id=update.effective_chat.id, text="Halo Gaes! 👋🏻")
+  context.bot.send_message(chat_id=update.effective_chat.id, text="Heyhoo! 👋🏻")
 
   # Initialize bard instance if not initialized
   #checkBardInstance(update, context)
