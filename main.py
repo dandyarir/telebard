@@ -39,10 +39,10 @@ def send_typing_action(func):
 def initBardInstance(update: Update, context, notify):
     global bardInstance
     bardInstance = Bard(token=token_bard, session=session, timeout=30)
-    bardInstance.get_answer("You are now named as Alyssa. If someone ask you your name, you should answer Alyssa. And You are Bot who created by @dandyarir")
+    response = bardInstance.get_answer("You are now act named as Alyssa. If someone ask you your name, you should answer Alyssa. And You are Bot who created by @dandyarir, a Software Engineer.")
+    print(response['content'])
     if notify:
         context.bot.send_message(chat_id=update.effective_chat.id, text="New Chat Initialized")
-    pass
 
 def checkBardInstance(update: Update, context, notify):
     global bardInstance
