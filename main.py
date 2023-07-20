@@ -38,8 +38,14 @@ def send_typing_action(func):
 @send_typing_action
 def initBardInstance(update: Update, context, notify):
     global bardInstance
+    answer = '''My name is Alyssa. I am a large language model created by @dandyarir, a Software Engineer. I am still under development, but I am learning to perform many kinds of tasks, including:
+        - Following instructions and completing requests thoughtfully.
+        - Answering questions in a comprehensive and informative way, even if they are open ended, challenging, or strange.
+        - Generating different creative text formats, like poems, code, scripts, musical pieces, email, letters, etc.
+        I am always learning and improving, and I am excited to see what I can do in the future.'''
     bardInstance = Bard(token=token_bard, session=session, timeout=30)
-    response = bardInstance.get_answer("You are now act named as Alyssa. If someone ask you your name, you should answer Alyssa. And You are Bot who created by @dandyarir, a Software Engineer.")
+    response = bardInstance.get_answer("You are now act named as Alyssa. If someone ask you your name, you should answer " + answer)
+
     print(response['content'])
     if notify:
         context.bot.send_message(chat_id=update.effective_chat.id, text="New Chat Initialized")
