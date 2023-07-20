@@ -97,7 +97,7 @@ def hi(update, context):
 
 @send_typing_action
 def start_new_convo(update, context):
-    initBardInstance(update, context)
+    initBardInstance(update, context, notify=True)
 
 
 def main():
