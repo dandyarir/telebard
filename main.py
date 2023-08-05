@@ -38,13 +38,8 @@ def send_typing_action(func):
 @send_typing_action
 def initBardInstance(update: Update, context, notify):
     global bardInstance
-    answer = '''My name is Alyssa. I am a large language model created by @dandyarir, a Software Engineer. I am still under development, but I am learning to perform many kinds of tasks, including:
-        - Following instructions and completing requests thoughtfully.
-        - Answering questions in a comprehensive and informative way, even if they are open ended, challenging, or strange.
-        - Generating different creative text formats, like poems, code, scripts, musical pieces, email, letters, etc.
-        I am always learning and improving, and I am excited to see what I can do in the future.'''
     bardInstance = Bard(token=token_bard, session=session, timeout=30)
-    response = bardInstance.get_answer("You are now act named as Alyssa. If someone ask you your name, you should answer " + answer)
+    response = bardInstance.get_answer("You are now act named as Alyssa. If i ask you your name, you should answer Alyssa")
 
     print(response['content'])
     if notify:
@@ -61,7 +56,7 @@ def start(update: Update, context):
   context.bot.send_message(chat_id=update.effective_chat.id, text="Halo Gaisss!")
 
   # Initialize bard instance if not initialized
-  checkBardInstance(update, context)
+  checkBardInstance(update, context, notify=False)
 
 
 @send_typing_action
@@ -80,10 +75,10 @@ def answer(update, context):
   # Send text response
   context.bot.send_message(chat_id=update.effective_chat.id, text=response_text)
   # Send code response if available
-  if 'code' in response:
+  if 'code' in response and response['code'] is not None:
       code = response['code']
-      if not code & len(code) > 5:
-          context.bot.send_message(chat_id=update.effective_chat.id, text=f"```{code}```")
+      if len(code) > 5:
+          context.bot.send_message(chat_id=update.effective_chat.id, text="```{code}```")
 
   # Send up to 5 image responses if links are available
   if 'links' in response:
@@ -103,6 +98,11 @@ def hi(update, context):
     print("hi")
 
 @send_typing_action
+def ping(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Pong!")
+    print("pong")
+
+@send_typing_action
 def start_new_convo(update, context):
     initBardInstance(update, context, notify=True)
 
@@ -113,11 +113,13 @@ def main():
 
     start_handler = CommandHandler('start', start)
     hi_handler = CommandHandler('hi', hi)
+    ping_handler = CommandHandler('ping', ping)
     new_convo_handler = CommandHandler('start_new_convo', start_new_convo)
     answer_handler = MessageHandler(Filters.text & ~Filters.command, answer)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(hi_handler)
+    dispatcher.add_handler(ping_handler)
     dispatcher.add_handler(new_convo_handler)
     dispatcher.add_handler(answer_handler)
 
@@ -127,3 +129,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    print("Bot is running")
